@@ -1,4 +1,4 @@
-package br.com.josemarcelo.SpringBootExcel;
+package br.com.josemarcelo.SpringBootExcel.Model;
 
 public class Aluno {
 	
