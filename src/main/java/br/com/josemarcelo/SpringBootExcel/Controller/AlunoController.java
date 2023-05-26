@@ -27,19 +27,19 @@ public class AlunoController {
 	private List<Aluno> alunos = new ArrayList<Aluno>();
 	@Value("${aplicacao.nomearquivo}")
 	private String nomearq1;
-	private static final String nomearq = "C:\\Stage\\Alunos.xlsx";
-		//"C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\target\\classes\\files\\Alunos.xlsx";
+	private static final String nomearq = "M:\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Alunos.xlsx";
 		
 	public AlunoController() throws IOException {
 		this.populaAlunos();
 	}
 		
 	private void populaAlunos() throws IOException {		
-		FileInputStream arquivo = new FileInputStream(new File(AlunoController.nomearq));
-		XSSFWorkbook workbook = new XSSFWorkbook(arquivo);
-		XSSFSheet sheet = workbook.getSheetAt(0);
 		
 		try {
+			FileInputStream arquivo = new FileInputStream(new File(AlunoController.nomearq));
+			XSSFWorkbook workbook = new XSSFWorkbook(arquivo);
+			XSSFSheet sheet = workbook.getSheetAt(0);
+			
 			for(Row row: sheet) {
 				alunos.add(new Aluno(
 						row.getCell(0).toString(),
@@ -53,18 +53,18 @@ public class AlunoController {
 			workbook.close();
 		}
 		catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();	
+			// TODO Auto-generated catch block
+			e.printStackTrace();	
 		}	
 		
 	}
 	
-	@GetMapping
+	@GetMapping("/notas")
 	Iterable<Aluno> getAlunos() {
 		return alunos;
 	}
 	
-	@GetMapping("/file")
+	@GetMapping("/arquivo")
 	String getFile() {
 		return nomearq1;
 	}
