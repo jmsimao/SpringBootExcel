@@ -27,18 +27,18 @@ public class AlunoController {
 	private List<Aluno> alunos = new ArrayList<Aluno>();
 	@Value("${aplicacao.nomearquivo}")
 	private String nomearq1;
-	private static final String nomearq = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Alunos.xlsx";
+	private static final String nomearq = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Cidades.xlsx";
 		
 	public AlunoController() throws IOException {
-		this.populaAlunos();
+		this.populaAlunos("Alunos");
 	}
 		
-	private void populaAlunos() throws IOException {		
+	private void populaAlunos(String sheetName) throws IOException {		
 		
 		try {
 			FileInputStream arquivo = new FileInputStream(new File(AlunoController.nomearq));
 			XSSFWorkbook workbook = new XSSFWorkbook(arquivo);
-			XSSFSheet sheet = workbook.getSheetAt(0);
+			XSSFSheet sheet = workbook.getSheet(sheetName);
 			
 			for(Row row: sheet) {
 				this.alunos.add(new Aluno(

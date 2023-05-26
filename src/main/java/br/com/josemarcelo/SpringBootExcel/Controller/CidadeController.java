@@ -29,15 +29,20 @@ public class CidadeController {
 	static final String nomearquivo = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Cidades.xlsx";
 	
 	public CidadeController() throws IOException {
-		this.populaCidade();
+		try {
+			this.populaCidade("Cidade");
+		}
+		catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 	}
 	
-	private void populaCidade() throws IOException {
+	private void populaCidade(String sheetName) throws IOException {
 		
 		try {
 			FileInputStream arquivo = new FileInputStream(new File(CidadeController.nomearquivo));
 			XSSFWorkbook workbook = new XSSFWorkbook(arquivo);
-			XSSFSheet sheet = workbook.getSheetAt(0);
+			XSSFSheet sheet = workbook.getSheet(sheetName);
 				
 			for (Row row: sheet) {
 				this.cidade.add(new Cidade(
