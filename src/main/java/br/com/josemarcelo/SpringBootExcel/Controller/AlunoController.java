@@ -21,13 +21,13 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.util.ArrayList;
 
 @RestController
-@RequestMapping("/alunos")
+@RequestMapping("/aluno")
 public class AlunoController {
 	
 	private List<Aluno> alunos = new ArrayList<Aluno>();
 	@Value("${aplicacao.nomearquivo}")
 	private String nomearq1;
-	private static final String nomearq = "M:\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Alunos.xlsx";
+	private static final String nomearq = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Alunos.xlsx";
 		
 	public AlunoController() throws IOException {
 		this.populaAlunos();
@@ -41,14 +41,14 @@ public class AlunoController {
 			XSSFSheet sheet = workbook.getSheetAt(0);
 			
 			for(Row row: sheet) {
-				alunos.add(new Aluno(
-						row.getCell(0).toString(),
-						row.getCell(1).toString(),
-						row.getCell(2).getNumericCellValue(),
-						row.getCell(3).getNumericCellValue(),
-						row.getCell(4).getNumericCellValue(),
-						row.getCell(5).getStringCellValue())
-						);
+				this.alunos.add(new Aluno(
+								row.getCell(0).toString(),
+								row.getCell(1).toString(),
+								row.getCell(2).getNumericCellValue(),
+								row.getCell(3).getNumericCellValue(),
+								row.getCell(4).getNumericCellValue(),
+								row.getCell(5).getStringCellValue())
+								);
 			}
 			workbook.close();
 		}
@@ -61,12 +61,12 @@ public class AlunoController {
 	
 	@GetMapping("/notas")
 	Iterable<Aluno> getAlunos() {
-		return alunos;
+		return this.alunos;
 	}
 	
 	@GetMapping("/arquivo")
 	String getFile() {
-		return nomearq1;
+		return this.nomearq1;
 	}
 	
 }

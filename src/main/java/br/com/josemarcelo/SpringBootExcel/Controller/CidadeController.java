@@ -22,11 +22,11 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @RestController
-@RequestMapping("/cidades")
+@RequestMapping("/cidade")
 public class CidadeController {
 
 	private List<Cidade> cidade = new ArrayList<Cidade>();
-	static final String nomearquivo = "M:\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Cidades.xlsx";
+	static final String nomearquivo = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Cidades.xlsx";
 	
 	public CidadeController() throws IOException {
 		this.populaCidade();
@@ -40,11 +40,11 @@ public class CidadeController {
 			XSSFSheet sheet = workbook.getSheetAt(0);
 				
 			for (Row row: sheet) {
-				cidade.add(new Cidade(
-						row.getCell(0).getNumericCellValue(),
-						row.getCell(1).toString(),
-						row.getCell(2).toString())
-						);
+				this.cidade.add(new Cidade(
+								row.getCell(0).getNumericCellValue(),
+								row.getCell(1).toString(),
+								row.getCell(2).toString())
+								);
 			}
 			workbook.close();
 		}
@@ -55,13 +55,13 @@ public class CidadeController {
 	
 	@GetMapping
 	Iterable<Cidade> getCidades() {
-		return cidade;
+		return this.cidade;
 	}
 	
-	@GetMapping("/{ncidade}")
-	Optional<Cidade> getCidadeByNome(@PathVariable String ncidade) {
-		for (Cidade c: cidade) {	
-			if (c.getCidade().equals(ncidade)) {
+	@GetMapping("/{nomeCidade}")
+	Optional<Cidade> getCidadeByNomeCidade(@PathVariable String nomeCidade) {
+		for (Cidade c: this.cidade) {	
+			if (c.getCidade().equals(nomeCidade)) {
 				return Optional.of(c);
 			}
 		}

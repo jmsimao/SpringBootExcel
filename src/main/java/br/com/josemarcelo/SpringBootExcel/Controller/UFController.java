@@ -23,7 +23,7 @@ import br.com.josemarcelo.SpringBootExcel.Model.UF;
 public class UFController {
 
 	private List<UF> uf = new ArrayList<UF>();
-	private static final String nomearquivo = "M:\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\UF.xlsx";
+	private static final String nomearquivo = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\UF.xlsx";
 	
 	public UFController() throws IOException {
 		this.populaUF();
@@ -37,11 +37,11 @@ public class UFController {
 			XSSFSheet sheet = workbook.getSheetAt(0);
 				
 			for (Row row: sheet) {
-				uf.add(new UF(
-						row.getCell(0).getNumericCellValue(),
-						row.getCell(1).toString(),
-						row.getCell(2).toString())
-						);
+				this.uf.add(new UF(
+								row.getCell(0).getNumericCellValue(),
+								row.getCell(1).toString(),
+								row.getCell(2).toString())
+								);
 			}
 			workbook.close();
 		}
@@ -51,13 +51,13 @@ public class UFController {
 	}
 
 	@GetMapping
-	Iterable<UF> getUFS() {
-		return uf;
+	Iterable<UF> getUF() {
+		return this.uf;
 	}
 	
 	@GetMapping("/{sigla}")
 	Optional<UF> getUFBySigla(@PathVariable String sigla) {
-		for (UF c: uf) {	
+		for (UF c: this.uf) {	
 			if (c.getSigla().equals(sigla)) {
 				return Optional.of(c);
 			}
