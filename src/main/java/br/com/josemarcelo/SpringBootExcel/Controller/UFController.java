@@ -23,7 +23,7 @@ import br.com.josemarcelo.SpringBootExcel.Model.UF;
 public class UFController {
 
 	private List<UF> uf = new ArrayList<UF>();
-	private static final String nomearquivo = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\UF.xlsx";
+	private static final String nomearquivo = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Cidades.xlsx";
 	
 	public UFController() throws IOException {
 		this.populaUF();
@@ -34,7 +34,7 @@ public class UFController {
 		try {
 			FileInputStream arquivo = new FileInputStream(new File(UFController.nomearquivo));
 			XSSFWorkbook workbook = new XSSFWorkbook(arquivo);
-			XSSFSheet sheet = workbook.getSheetAt(0);
+			XSSFSheet sheet = workbook.getSheetAt(1);
 				
 			for (Row row: sheet) {
 				this.uf.add(new UF(
