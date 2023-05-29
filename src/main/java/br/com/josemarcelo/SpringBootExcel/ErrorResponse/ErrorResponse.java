@@ -1,30 +1,41 @@
 package br.com.josemarcelo.SpringBootExcel.ErrorResponse;
 
 public class ErrorResponse {
-	
-	private int status;
+		
+	private final int erroHttpNo;
+	private final String erroHttpInfo;
 	private String mensagem;
+	private String erroInfo;
 	
-	public ErrorResponse(int status, String mensagem) {
+	public ErrorResponse(int erroHttpNo, String erroHttpInfo, String mensagem, String erroInfo) {
 		super();
-		this.status = status;
+		this.erroHttpNo = erroHttpNo;
+		this.erroHttpInfo = erroHttpInfo;
 		this.mensagem = mensagem;
+		this.erroInfo = erroInfo;
 	}
 
-	public int getStatus() {
-		return status;
+	public int getErroHttpNo() {
+		return this.erroHttpNo;
 	}
 
-	public void setStatus(int status) {
-		this.status = status;
+	public String getErroHttpInfo() {
+		return this.erroHttpInfo;
 	}
 
 	public String getMensagem() {
-		return mensagem;
+		return this.mensagem;
 	}
 
 	public void setMensagem(String mensagem) {
 		this.mensagem = mensagem;
 	}
 
+	public String getErroInfo() {
+		return this.erroInfo;
+	}
+
+	public void setErroInfo(String erroInfo) {
+		this.erroInfo = erroInfo;
+	}
 }
