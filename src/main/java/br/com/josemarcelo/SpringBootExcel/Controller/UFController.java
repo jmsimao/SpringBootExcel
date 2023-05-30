@@ -66,7 +66,7 @@ public class UFController {
 		if (!this.uf.isEmpty()) {
 			return this.uf;
 		}
-		throw new NotFoundException("Não há UFs cadastradas!", null);
+		throw new NotFoundException("Não há UFs cadastradas!", null, null);
 	}
 	
 	@GetMapping("/{sigla}")
@@ -76,7 +76,7 @@ public class UFController {
 				return Optional.of(c);
 			}
 		}
-		throw new NotFoundException("Sigla \"" + sigla + "\" é inválida!","Informe uma sigla válida!");
+		throw new NotFoundException("Sigla \"" + sigla + "\" é inválida!","Informe uma sigla válida!", null);
 	}
 	
 	@ExceptionHandler(NotFoundException.class)
@@ -85,7 +85,8 @@ public class UFController {
 										HttpStatus.NOT_FOUND.value(),
 										HttpStatus.NOT_FOUND.toString(),
 										e.getMessage(),
-										e.getErroInfo())
+										e.getErroInfo(),
+										e.getNomeClasse())
 										;
 		return new ResponseEntity<>(errorResponse,
 								HttpStatus.NOT_FOUND)

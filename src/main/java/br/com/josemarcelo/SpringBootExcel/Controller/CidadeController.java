@@ -71,7 +71,7 @@ public class CidadeController {
 		if (!this.cidade.isEmpty()) {
 			return this.cidade;
 		}
-		throw new NotFoundException("Não há cidades cadastradas!", null);
+		throw new NotFoundException("Não há cidades cadastradas!", null, null);
 	}
 	
 	@GetMapping("/{nomeCidade}")
@@ -81,7 +81,7 @@ public class CidadeController {
 				return Optional.of(c);
 			}
 		}
-		throw new NotFoundException("Cidade \"" + nomeCidade + "\" não existe!","Informe uma cidade cadastrada!");
+		throw new NotFoundException("Cidade \"" + nomeCidade + "\" não existe!","Informe uma cidade cadastrada!", this.getClass().toString());
 	}
 	
     @ExceptionHandler(NotFoundException.class)
@@ -89,7 +89,8 @@ public class CidadeController {
     	ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(),
     										HttpStatus.NOT_FOUND.toString(),
     										e.getMessage(),
-    										e.getErroInfo()
+    										e.getErroInfo(),
+    										e.getNomeClasse()
     										);
     	return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
