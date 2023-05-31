@@ -2,8 +2,6 @@ package br.com.josemarcelo.SpringBootExcel.Controller;
 
 import br.com.josemarcelo.SpringBootExcel.ErrorResponse.ErrorResponse;
 import br.com.josemarcelo.SpringBootExcel.ErrorResponse.NotFoundException;
-
-
 import br.com.josemarcelo.SpringBootExcel.Model.Cidade;
 
 import java.util.List;
@@ -16,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -68,10 +65,10 @@ public class CidadeController {
 	
 	@GetMapping
 	Iterable<Cidade> getCidades() {
-		if (!this.cidade.isEmpty()) {
-			return this.cidade;
+		if (this.cidade.isEmpty()) {
+			throw new NotFoundException("Não há cidades cadastradas!","Base de dados vazia!");
 		}
-		throw new NotFoundException("Não há cidades cadastradas!", null, null);
+		return this.cidade;
 	}
 	
 	@GetMapping("/{nomeCidade}")
@@ -81,18 +78,21 @@ public class CidadeController {
 				return Optional.of(c);
 			}
 		}
-		throw new NotFoundException("Cidade \"" + nomeCidade + "\" não existe!","Informe uma cidade cadastrada!", this.getClass().toString());
+		throw new NotFoundException("Nome de cidade inválida!","Nome da cidade: " + nomeCidade);
 	}
 	
-    @ExceptionHandler(NotFoundException.class)
-    private ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException e) {
-    	ErrorResponse errorResponse = new ErrorResponse(HttpStatus.NOT_FOUND.value(),
-    										HttpStatus.NOT_FOUND.toString(),
-    										e.getMessage(),
-    										e.getErroInfo(),
-    										e.getNomeClasse()
-    										);
-    	return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
-    }
+	@ExceptionHandler(NotFoundException.class)
+	private ResponseEntity<ErrorResponse> handlerNotFoundException(NotFoundException e) {
+		ErrorResponse errorResponse = new ErrorResponse(
+										HttpStatus.NOT_FOUND.value(),
+										HttpStatus.NOT_FOUND.toString(),
+										e.getMessage(),
+										e.getErroInfo(),
+										this.getClass().getName()
+										);
+		return new ResponseEntity<>(errorResponse,
+								HttpStatus.NOT_FOUND
+								);
+	}
 	
 }

@@ -1,12 +1,12 @@
 package br.com.josemarcelo.SpringBootExcel.ErrorResponse;
 
 public class ErrorResponse {
-		
+	
 	private final int erroHttpNo;
 	private final String erroHttpInfo;
 	private String mensagem;
 	private String erroInfo;
-	private String nomeClasse;
+	private final String nomeClasse;
 	
 	public ErrorResponse(int erroHttpNo, String erroHttpInfo, String mensagem, String erroInfo, String nomeClasse) {
 		super();
@@ -17,16 +17,8 @@ public class ErrorResponse {
 		this.nomeClasse = nomeClasse;
 	}
 
-	public int getErroHttpNo() {
-		return this.erroHttpNo;
-	}
-
-	public String getErroHttpInfo() {
-		return this.erroHttpInfo;
-	}
-
 	public String getMensagem() {
-		return this.mensagem;
+		return mensagem;
 	}
 
 	public void setMensagem(String mensagem) {
@@ -34,19 +26,23 @@ public class ErrorResponse {
 	}
 
 	public String getErroInfo() {
-		return this.erroInfo;
+		return erroInfo;
 	}
 
 	public void setErroInfo(String erroInfo) {
 		this.erroInfo = erroInfo;
 	}
-	
+
+	public int getErroHttpNo() {
+		return erroHttpNo;
+	}
+
+	public String getErroHttpInfo() {
+		return erroHttpInfo;
+	}
+
 	public String getNomeClasse() {
-		return this.nomeClasse;
+		return nomeClasse;
 	}
-	
-	public void setNomeClasse(String nomeClasse) {
-		this.nomeClasse = nomeClasse;
-	}
-	
+
 }

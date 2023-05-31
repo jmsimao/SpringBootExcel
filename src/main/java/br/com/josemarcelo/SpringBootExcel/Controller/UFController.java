@@ -1,7 +1,5 @@
 package br.com.josemarcelo.SpringBootExcel.Controller;
 
-import br.com.josemarcelo.SpringBootExcel.ErrorResponse.NotFoundException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,8 +19,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.josemarcelo.SpringBootExcel.Model.UF;
 import br.com.josemarcelo.SpringBootExcel.ErrorResponse.ErrorResponse;
+import br.com.josemarcelo.SpringBootExcel.ErrorResponse.NotFoundException;
+import br.com.josemarcelo.SpringBootExcel.Model.UF;
 
 @RestController
 @RequestMapping("/uf")
@@ -63,10 +62,10 @@ public class UFController {
 
 	@GetMapping
 	Iterable<UF> getUF() {
-		if (!this.uf.isEmpty()) {
-			return this.uf;
+		if (this.uf.isEmpty()) {
+			throw new NotFoundException("Não há UFs cadastradas!","Base de dados vazia");
 		}
-		throw new NotFoundException("Não há UFs cadastradas!", null, null);
+		return this.uf;
 	}
 	
 	@GetMapping("/{sigla}")
@@ -76,7 +75,7 @@ public class UFController {
 				return Optional.of(c);
 			}
 		}
-		throw new NotFoundException("Sigla \"" + sigla + "\" é inválida!","Informe uma sigla válida!", null);
+		throw new NotFoundException("Sigla inválida da UF!","Sigla informada: " + sigla);
 	}
 	
 	@ExceptionHandler(NotFoundException.class)
@@ -86,11 +85,14 @@ public class UFController {
 										HttpStatus.NOT_FOUND.toString(),
 										e.getMessage(),
 										e.getErroInfo(),
-										e.getNomeClasse())
-										;
+										this.getClass().getName()
+										);
+		
 		return new ResponseEntity<>(errorResponse,
-								HttpStatus.NOT_FOUND)
-							;
+									HttpStatus.NOT_FOUND
+									);
 	}
 	
+	
+		
 }
