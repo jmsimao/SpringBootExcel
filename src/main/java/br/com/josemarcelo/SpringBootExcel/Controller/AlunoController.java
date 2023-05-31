@@ -1,10 +1,13 @@
 package br.com.josemarcelo.SpringBootExcel.Controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.josemarcelo.SpringBootExcel.AppConfig.ApplicationConfig;
 import br.com.josemarcelo.SpringBootExcel.Model.Aluno;
 
 import java.util.List;
@@ -22,13 +25,17 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/aluno")
+
 public class AlunoController {
-	
+		
 	private List<Aluno> alunos = new ArrayList<Aluno>();
 	@Value("${aplicacao.nomearquivo}")
 	private String nomearq1;
-	private static final String nomearq = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Cidades.xlsx";
-		
+	
+	@Autowired
+	private String home;
+	private static String nomearq = "C:/Stage/Cidades.xlsx";
+	
 	public AlunoController() throws IOException {
 		this.populaAlunos("Alunos");
 	}
@@ -66,7 +73,7 @@ public class AlunoController {
 	
 	@GetMapping("/arquivo")
 	String getFile() {
-		return this.nomearq1;
+		return home;
 	}
 	
 }

@@ -29,7 +29,7 @@ import br.com.josemarcelo.SpringBootExcel.ErrorResponse.ErrorResponse;
 public class UFController {
 
 	private List<UF> uf = new ArrayList<UF>();
-	private static final String nomearquivo = "C:\\Users\\josesimao\\eclipse-workspace2\\SpringBootExcel\\src\\main\\resources\\files\\Cidades.xlsx";
+	private static final String nomearquivo = "C:/Stage/Cidades.xlsx";
 	
 	public UFController() throws IOException {
 		try {
