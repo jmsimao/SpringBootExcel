@@ -28,10 +28,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 @RestController
 @RequestMapping("/cidade")
+/* endpoints: 
+ *  /cidade  					--> Todas as cidades.
+ *  /cidade/20					--> Busca pelo id.
+ *  /cidade/nome/São Paulo 		--> Busca pelo nome da cidade.
+ *  /cidade/parcela/Branca		--> Busca todas as cidades que contém a
+ *  								palavra "Branca"
+ */
 public class CidadeController {
 
 	private List<Cidade> cidade = new ArrayList<Cidade>();
-	static final String nomearquivo = "C:/Stage/Cidades.xlsx";
+	private static final String nomearquivo = "C:/Stage/Cidades.xlsx";
 
 	public CidadeController() throws IOException {
 		try {
@@ -62,23 +69,47 @@ public class CidadeController {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@GetMapping
-	Iterable<Cidade> getCidades() {
+	public Iterable<Cidade> getCidades() {
 		if (this.cidade.isEmpty()) {
 			throw new NotFoundException("Não há cidades cadastradas!","Base de dados vazia!");
 		}
 		return this.cidade;
 	}
 	
-	@GetMapping("/{nomeCidade}")
-	Optional<Cidade> getCidadeByNomeCidade(@PathVariable String nomeCidade) {
-		for (Cidade c: this.cidade) {	
-			if (c.getCidade().equals(nomeCidade)) {
-				return Optional.of(c);
+	@GetMapping("/{id}")
+	public Optional<Cidade> getCidadeById(@PathVariable double id) {
+		for (Cidade cidade: this.cidade)  {
+			if (cidade.getId() == id) {
+				return Optional.of(cidade);
 			}
 		}
-		throw new NotFoundException("Nome de cidade inválida!","Nome da cidade: " + nomeCidade);
+		throw new NotFoundException("Id da cidade não existe!","Id: " + id);
+	}
+	
+	@GetMapping("/nome/{nome}")
+	public Optional<Cidade> getCidadeByNome(@PathVariable String nome) {
+		for (Cidade cidade: this.cidade) {	
+			if (cidade.getCidade().equals(nome)) {
+				return Optional.of(cidade);
+			}
+		}
+		throw new NotFoundException("Nome de cidade inválida!","Nome da cidade: " + nome);
+	}
+	
+	@GetMapping("/parcela/{nome}")
+	public Iterable<Cidade> getCidadeByNomeParcela(@PathVariable String nome) {
+		List<Cidade> parcelaCidade = new ArrayList<Cidade>();
+		for (Cidade cidade: this.cidade) {
+			if (cidade.getCidade().contains(nome)) {
+				parcelaCidade.add(cidade);
+			}
+		}
+		if (parcelaCidade.size() > 0) {
+			return parcelaCidade;
+		}
+		throw new NotFoundException("Não há cidades pela palavra informada!","Parcela: " + nome);
 	}
 	
 	@ExceptionHandler(NotFoundException.class)

@@ -25,6 +25,11 @@ import br.com.josemarcelo.SpringBootExcel.Model.UF;
 
 @RestController
 @RequestMapping("/uf")
+/* endpoints: 
+ *  /uf  						--> Todas as UFs.
+ *  /uf/5						--> Busca pelo id.
+ *  /uf/sigla/MG				--> Busca pela sigla.
+ */
 public class UFController {
 
 	private List<UF> uf = new ArrayList<UF>();
@@ -32,14 +37,14 @@ public class UFController {
 	
 	public UFController() throws IOException {
 		try {
-			this.populaUF("UF");
+			this.populaUf("UF");
 		}
 		catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private void populaUF(String sheetName) throws IOException {
+	private void populaUf(String sheetName) throws IOException {
 		
 		try {
 			FileInputStream arquivo = new FileInputStream(new File(UFController.nomearquivo));
@@ -61,18 +66,28 @@ public class UFController {
 	}
 
 	@GetMapping
-	Iterable<UF> getUF() {
+	public Iterable<UF> getUf() {
 		if (this.uf.isEmpty()) {
 			throw new NotFoundException("Não há UFs cadastradas!","Base de dados vazia");
 		}
 		return this.uf;
 	}
 	
-	@GetMapping("/{sigla}")
-	Optional<UF> getUFBySigla(@PathVariable String sigla) {
-		for (UF c: this.uf) {	
-			if (c.getSigla().equals(sigla)) {
-				return Optional.of(c);
+	@GetMapping("/{id}")
+	public Optional<UF> getUfById(@PathVariable double id) {
+		for (UF uf: this.uf) {
+			if (uf.getId() == id) {
+				return Optional.of(uf);
+			}
+		}
+		throw new NotFoundException("Id da UF não localizado!","Id: " + id);
+	}
+	
+	@GetMapping("/sigla/{sigla}")
+	public Optional<UF> getUfBySigla(@PathVariable String sigla) {
+		for (UF uf: this.uf) {	
+			if (uf.getSigla().equals(sigla)) {
+				return Optional.of(uf);
 			}
 		}
 		throw new NotFoundException("Sigla inválida da UF!","Sigla informada: " + sigla);
@@ -92,7 +107,5 @@ public class UFController {
 									HttpStatus.NOT_FOUND
 									);
 	}
-	
-	
 		
 }

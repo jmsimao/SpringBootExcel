@@ -2,12 +2,10 @@ package br.com.josemarcelo.SpringBootExcel.Controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.josemarcelo.SpringBootExcel.AppConfig.ApplicationConfig;
 import br.com.josemarcelo.SpringBootExcel.Model.Aluno;
 
 import java.util.List;
@@ -25,7 +23,10 @@ import java.util.ArrayList;
 
 @RestController
 @RequestMapping("/aluno")
-
+/* endpoints: 
+ *  /aluno/notas			--> Notas dos alunos.
+ *  /aluno/arquivo			--> Teste de saída.
+ */
 public class AlunoController {
 		
 	private List<Aluno> alunos = new ArrayList<Aluno>();
@@ -73,7 +74,7 @@ public class AlunoController {
 	
 	@GetMapping("/arquivo")
 	String getFile() {
-		return home;
+		return "<h1>" + home + "</h1>";
 	}
 	
 }
