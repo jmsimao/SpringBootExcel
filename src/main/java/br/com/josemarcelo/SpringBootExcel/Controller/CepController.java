@@ -22,18 +22,24 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.josemarcelo.SpringBootExcel.Model.Cep;
 import br.com.josemarcelo.SpringBootExcel.ErrorResponse.*;
 
+import java.text.DecimalFormat;
+
 @RestController
 @RequestMapping("/cepsp")
 /* endpoints: 
  *  /cepsp/08551100						--> Buscar por um cep.
  *  /cepsp/logradouro/Av. Tiradentes	--> Busca pelo logradouro.
- *  /cepsp/parcela/Paulista				--> Retorna os logradouros com a palavra "Paulista".
+ *  /cepsp/logradouro/parcela/Paulista	--> Retorna os logradouros com a palavra "Paulista".
+ *  /cepsp/bairro/Campos				--> Retorna os bairros com a palavra "Campos".
+ *  /cepsp/cidade/6386					--> Retorna os CEPs da cidade 6386.
  *  /cepsp/nroceps						--> Retorna a quantidade de CEPs cadastrados.
  */
 public class CepController {
 	
 	private List<Cep> cepsp = new ArrayList<Cep>();
 	private static final String nomearq = "C:/Stage/CEPSP.xlsx";
+	
+	private DecimalFormat df = new DecimalFormat("###,###,###");
 	
 	public CepController() throws IOException {
 		this.populaCep("CEPSP");
@@ -84,7 +90,7 @@ public class CepController {
 		throw new NotFoundException("CEP não localizado pelo nome do logradouro!","Logradouro: " + logr);
 	}
 
-	@GetMapping("/parcela/{logr}")
+	@GetMapping("/logradouro/parcela/{logr}")
 	public Iterable<Cep> getCepsByLogradouroParcela(@PathVariable String logr) {
 		List<Cep> parcelaCep = new ArrayList<Cep>();
 		for (Cep cep: this.cepsp) {
@@ -97,13 +103,41 @@ public class CepController {
 		}
 		throw new NotFoundException("Não há logradouros pela palavra informada!","Parcela: " + logr);
 	}
-
+	
+	@GetMapping("/bairro/{bairro}") 
+	public Iterable<Cep> getCepsByBairroParcela(@PathVariable String bairro) {
+		List<Cep> parcelaCep = new ArrayList<>();
+		for (Cep cep: this.cepsp) {
+			if (cep.getBairro().contains(bairro)) {
+				parcelaCep.add(cep);
+			}
+		}
+		if (parcelaCep.size() > 0) {
+			return parcelaCep;
+		}
+		throw new NotFoundException("Não há bairros pela palavra informada!","Parcela: " + bairro);
+	}
+	
+	@GetMapping("/cidade/{cidade}") 
+	public Iterable<Cep> getCepsByCidade(@PathVariable double cidade) {
+		List<Cep> parcelaCep = new ArrayList<Cep>();
+		for (Cep cep: this.cepsp) {
+			if (cep.getCidade() == cidade) {
+				parcelaCep.add(cep);
+			}
+		}
+		if (parcelaCep.size() > 0) {
+			return parcelaCep;
+		}
+		throw new NotFoundException("Não há cidades cadastradas pelo código!","Cidade: " + cidade);
+	}
+	
 	@GetMapping("/nroceps")
-	public double getCepNroCeps() {
+	public String getCepNroCeps() {
 		if (this.cepsp.isEmpty()) {
 			throw new NotFoundException("Não há CEPs cadastrados!",null);
 		}
-		return cepsp.size();
+		return "<h1>CEPs cadastrados: " + df.format(cepsp.size()) + "</h1>";
 	}
 	
 	@ExceptionHandler(NotFoundException.class)
