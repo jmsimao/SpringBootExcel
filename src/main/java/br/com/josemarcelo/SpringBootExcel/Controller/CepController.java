@@ -140,6 +140,13 @@ public class CepController {
 		return "<h1>CEPs cadastrados: " + df.format(cepsp.size()) + "</h1>";
 	}
 	
+	/*
+	@GetMapping("/all")
+	public Iterable<Cep> getAllCeps() {
+		return this.cepsp;
+	}
+	*/
+	
 	@ExceptionHandler(NotFoundException.class)
 	private ResponseEntity<ErrorResponse> handlerNotFoundException(NotFoundException nfe) {
 		ErrorResponse errorResponse = new ErrorResponse(
